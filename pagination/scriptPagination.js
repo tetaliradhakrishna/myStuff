@@ -1,5 +1,8 @@
 var app = angular.module('myApp', ['ui.bootstrap']);
 
+
+//https://gist.github.com/kmaida/06d01f6b878777e2ea34
+
 app.filter('startFrom', function () {
 	return function (input, start) {
 		if (input) {
