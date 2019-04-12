@@ -14,21 +14,22 @@ var convertDateToInteger = function(data){
 		return Number(formattedDate); //This will convert the date string into number, in order to store in database
 		}
 	};
-
+// current months  
 let dateToInteger = convertDateToInteger(new Date()).toString().substr(4,8);
+// current Year date month 
+let currentYear = convertDateToInteger(new Date(new Date().setFullYear(new Date().getFullYear())));
+//this addtion of one year to the current year  
+let addOneYear = convertDateToInteger(new Date(new Date().setFullYear(new Date().getFullYear() + 1)));
 
-console.log('Get string Day and Month',dateToInteger);
+console.log('business Year ',currentYear.toString().substr(0,4) + '-' + addOneYear.toString().substr(0,4));
 
 console.log('status',validation());
-
 function validation(){
 
 			if(dateToInteger == "0402" ){
-
 				return 'Matched';
 			}
 			else{
-
 			   return "Wait till macth the  Record";
 			}
     }
