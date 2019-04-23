@@ -1,5 +1,12 @@
 // covert the Date to integer 
 
+let convertIntegerToDate = function(data){
+    //Need to convert the date integer into date format yyyy-mm-dd
+    var dateString = '' + data;
+    var dateFormat = dateString.substr(0,4) + "-" + dateString.substr(4,2) + "-" + dateString.substr(6,2);
+    return new Date(dateFormat);
+};
+
 
 var convertDateToInteger = function(data){
 		if(data == undefined || data ==  null || data ==""){
