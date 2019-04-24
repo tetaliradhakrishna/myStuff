@@ -43,15 +43,31 @@ app.post('/cal',(req,res)=>{
 
 
  let bondedDate = moment(req.body.bondDate, "YYYY-MM-DD");
- let billedDate = moment(req.body.billDate,"YYYY-MM-DD")
-
-
+ let billedDate = moment(req.body.billDate,"YYYY-MM-DD");
+ let billAmount = req.body.billAmount;
+ 
+  
 //Difference in number of days
 let DIFF_BW_DATES = -(moment.duration(bondedDate.diff(billedDate)).asDays())
 
 // count the how many weeks ...b/w date
 let NO_OF_WEEKS = DIFF_BW_DATES/7;
+let RIUNDED_TOTAL_NO_OF_WEEKS = Math.ceil(NO_OF_WEEKS)
 let UNBILLED_WEEKS = Math.ceil((NO_OF_WEEKS >= 4 ) ? NO_OF_WEEKS - 4 : 0);
+ // cal Amount
+ let TOTAL_AMOUNT_CONVERT_WEEK_AMOUNT  = (RIUNDED_TOTAL_NO_OF_WEEKS == 0 )? 0: billAmount / RIUNDED_TOTAL_NO_OF_WEEKS ;
+ 
+
+ // FIRST 4 WEEKS 
+ let BILLED_AMOUNT =  (TOTAL_AMOUNT_CONVERT_WEEK_AMOUNT) *  4 
+  
+ let UN_BILLED_AMOUNT  = billAmount - BILLED_AMOUNT 
+
+//  console.log("total amount ", billAmount)
+//  console.log("rounded no of weeks  " ,RIUNDED_TOTAL_NO_OF_WEEKS)
+//  console.log('total bill / one week amount  ' ,TOTAL_AMOUNT_CONVERT_WEEK_AMOUNT);
+//  console.log('total bill /  billed amount ' ,BILLED_AMOUNT);
+//  console.log('total bill / un billed amount ' ,UN_BILLED_AMOUNT);
 
 // console.log( 'DIff Days ', DIFF_BW_DATES);
 // console.log( 'NO of Weeks ',NO_OF_WEEKS);
@@ -62,7 +78,15 @@ res.status(200).send({bonded:bondedDate,
                       diffDays:DIFF_BW_DATES,
                       noOfWeeks:NO_OF_WEEKS,
                       roundedNoOfWeeks:Math.ceil(NO_OF_WEEKS),
-                      ubbilledweeks:UNBILLED_WEEKS})
+                      ubbilledweeks:UNBILLED_WEEKS,
+                      totalAmount:billAmount,
+                      amountPerWeekAmount:TOTAL_AMOUNT_CONVERT_WEEK_AMOUNT,
+                      roundedperweekAmount:Math.round(TOTAL_AMOUNT_CONVERT_WEEK_AMOUNT),
+                      billedAmount:BILLED_AMOUNT,
+                      roundedBilledAmount:Math.round(BILLED_AMOUNT),
+                      unbilledAmount:UN_BILLED_AMOUNT,
+                      roundedUnbliedAmount:Math.round(UN_BILLED_AMOUNT)
+                    })
 res.end();
 })
 

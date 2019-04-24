@@ -21,11 +21,19 @@
                 </style>
 
 <div ng-app="myApp" ng-controller="myCtrl">
+<form ng:submit ="submit()">
 
-Bond Date : <input type="date" ng-model="bondDate"><br>
-Bill Date: <input type="date" ng-model="billDate"><br>
+
+Bond Date : <input type="date" ng-model="bondDate" required><br>
+Bill Date: <input type="date" ng-model="billDate" required><br>
+Bill Amount :<input type="number" ng-model="billAmount" required>
 <br>
-<button type="button" ng:click ="submit()">Generate no weeks</button>
+  <br>
+
+<button type="submit" >Generate no weeks</button>
+</form>
+  
+
 <br>
 <br>
 
@@ -48,6 +56,35 @@ Bill Date: <input type="date" ng-model="billDate"><br>
         <td>{{responsedata.ubbilledweeks}}</td>
       </tr>
 </table>
+<br>
+<br>
+<table ng:show ="dataShow">
+    <tr>
+        <th>Total Amount  </th>
+
+        <th>Total Amount per week</th>
+        <th>Rounded Amount per week</th>
+
+        <th>Billed Amount (first 4 weeks )</th>
+        <th>Rounded Billed Amount(first 4 weeks ) </th>
+
+        <th>Actual Un Billed Amount</th>
+        <th>Rounded Un Billed Amount </th>
+       
+      </tr>
+      <tr>
+        <td>{{responsedata.totalAmount }}</td>
+
+        <td>{{responsedata.amountPerWeekAmount }}</td>
+        <td>{{responsedata.roundedperweekAmount }}</td>
+
+        <td>{{responsedata.billedAmount}}</td>
+        <td>{{responsedata.roundedBilledAmount}}</td>
+
+        <td>{{responsedata.unbilledAmount}}</td>
+        <td>{{responsedata.roundedUnbliedAmount}}</td>
+      </tr>
+</table>
 
 </div>
 
@@ -64,7 +101,7 @@ app.controller('myCtrl', function($scope,$http) {
     $http({
          method: 'POST',
          url: '/cal',
-         data:{bondDate:$scope.bondDate,billDate:$scope.billDate}
+         data:{bondDate:$scope.bondDate,billDate:$scope.billDate,billAmount:$scope.billAmount}
 }).then(function successCallback(response) {
     // this callback will be called asynchronously
     // when the response is available
