@@ -8,8 +8,8 @@ var cfenv = require('cfenv');
 var appEnv = cfenv.getAppEnv();
 
 app.use(bodyParser.urlencoded({
-    extended: true
-  }));
+  extended: true
+}));
 
 app.use(bodyParser.json()); // To read the body passed in JSON
 
@@ -32,68 +32,60 @@ app.use(cors());
 
 app.listen(8888, '0.0.0.0', function () { //to run locally
 
-    //app.listen(3000, 'localhost', function() { //to run locally
-    // print a message when the server starts listening
-    console.log("server starting on " + appEnv.url);
-    
-  });
+  //app.listen(3000, 'localhost', function() { //to run locally
+  // print a message when the server starts listening
+  console.log("server starting on " + appEnv.url);
 
-app.post('/cal',(req,res)=>{
- //console.log(req.body);
+});
+
+app.post('/cal', (req, res) => {
+  //console.log(req.body);
 
 
- let bondedDate = moment(req.body.bondDate, "YYYY-MM-DD");
- let billedDate = moment(req.body.billDate,"YYYY-MM-DD");
- let billAmount = req.body.billAmount;
- 
+  let bondedDate = moment(req.body.bondDate, "YYYY-MM-DD");
+  let billedDate = moment(req.body.billDate, "YYYY-MM-DD");
+  // bill amount nothing but  s
+  let ONE_SQM_PRICE = req.body.billAmount;
+  let noOfContainers = req.body.noOfContainers;
+  let size = req.body.size;
+
+
+  //Difference in number of days
+  let DIFF_BW_DATES = -(moment.duration(bondedDate.diff(billedDate)).asDays())
+  // count the how many weeks ...b/w date
+  let NO_OF_WEEKS = DIFF_BW_DATES / 7;  
+
+  let UNBILLED_WEEKS = Math.ceil((NO_OF_WEEKS >= 4) ? NO_OF_WEEKS - 4 : 0);
+
+  let NO_SQM = noOfContainers * size;
+  let FIRST_WEEK_BILLED_AMOUNT = 1 * NO_SQM * ONE_SQM_PRICE
+  let FIRST_4_WEEKS_BIILED_AMOUT = 4 * NO_SQM * ONE_SQM_PRICE;
   
-//Difference in number of days
-let DIFF_BW_DATES = -(moment.duration(bondedDate.diff(billedDate)).asDays())
+  console.log("NO_SQM",NO_SQM);
+  console.log("FIRST_WEEK_BILLED_AMOUNT",FIRST_WEEK_BILLED_AMOUNT);
+  console.log("FIRST_4_WEEKS_BIILED_AMOUT",FIRST_4_WEEKS_BIILED_AMOUT);
 
-// count the how many weeks ...b/w date
-let NO_OF_WEEKS = DIFF_BW_DATES/7;
-let RIUNDED_TOTAL_NO_OF_WEEKS = Math.ceil(NO_OF_WEEKS)
-let UNBILLED_WEEKS = Math.ceil((NO_OF_WEEKS >= 4 ) ? NO_OF_WEEKS - 4 : 0);
- // cal Amount
- let TOTAL_AMOUNT_CONVERT_WEEK_AMOUNT  = (RIUNDED_TOTAL_NO_OF_WEEKS == 0 )? 0: billAmount / RIUNDED_TOTAL_NO_OF_WEEKS ;
- 
 
- // FIRST 4 WEEKS 
- let BILLED_AMOUNT =  (TOTAL_AMOUNT_CONVERT_WEEK_AMOUNT) *  4 
-  
- let UN_BILLED_AMOUNT  = billAmount - BILLED_AMOUNT 
+  res.status(200).send({
+    bonded: bondedDate,
+    billed: billedDate,
+    diffDays: DIFF_BW_DATES,
+    roundedNoOfWeeks: Math.ceil(NO_OF_WEEKS),
+    ubbilledweeks: UNBILLED_WEEKS,
+    roundedperweekAmount:FIRST_WEEK_BILLED_AMOUNT,
 
-//  console.log("total amount ", billAmount)
-//  console.log("rounded no of weeks  " ,RIUNDED_TOTAL_NO_OF_WEEKS)
-//  console.log('total bill / one week amount  ' ,TOTAL_AMOUNT_CONVERT_WEEK_AMOUNT);
-//  console.log('total bill /  billed amount ' ,BILLED_AMOUNT);
-//  console.log('total bill / un billed amount ' ,UN_BILLED_AMOUNT);
+    fourWeeks:Math.round(FIRST_4_WEEKS_BIILED_AMOUT),
+    areaInSq:NO_SQM
 
-// console.log( 'DIff Days ', DIFF_BW_DATES);
-// console.log( 'NO of Weeks ',NO_OF_WEEKS);
-// console.log( 'unBilled Weeks ', UNBILLED_WEEKS); 
 
-res.status(200).send({bonded:bondedDate,
-                      billed:billedDate,
-                      diffDays:DIFF_BW_DATES,
-                      noOfWeeks:NO_OF_WEEKS,
-                      roundedNoOfWeeks:Math.ceil(NO_OF_WEEKS),
-                      ubbilledweeks:UNBILLED_WEEKS,
-                      totalAmount:billAmount,
-                      amountPerWeekAmount:TOTAL_AMOUNT_CONVERT_WEEK_AMOUNT,
-                      roundedperweekAmount:Math.round(TOTAL_AMOUNT_CONVERT_WEEK_AMOUNT),
-                      billedAmount:BILLED_AMOUNT,
-                      roundedBilledAmount:Math.round(BILLED_AMOUNT),
-                      unbilledAmount:UN_BILLED_AMOUNT,
-                      roundedUnbliedAmount:Math.round(UN_BILLED_AMOUNT)
-                    })
-res.end();
+  })
+  res.end();
 })
 
 
 
 
-app.get('/' ,(req,res)=>{
+app.get('/', (req, res) => {
   res.sendfile('index.html');
 })
 

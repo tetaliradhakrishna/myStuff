@@ -1,122 +1,114 @@
 <!DOCTYPE html>
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
 <body>
-        <style>
-                table {
-                  font-family: arial, sans-serif;
-                  border-collapse: collapse;
-                  width: 100%;
-                }
-                
-                td, th {
-                  border: 1px solid #dddddd;
-                  text-align: left;
-                  padding: 8px;
-                }
-                
-                tr:nth-child(even) {
-                  background-color: #dddddd;
-                }
-                </style>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
 
-<div ng-app="myApp" ng-controller="myCtrl">
-<form ng:submit ="submit()">
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
 
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
 
-Bond Date : <input type="date" ng-model="bondDate" required><br>
-Bill Date: <input type="date" ng-model="billDate" required><br>
-Bill Amount :<input type="number" ng-model="billAmount" required>
-<br>
-  <br>
-
-<button type="submit" >Generate no weeks</button>
-</form>
-  
-
-<br>
-<br>
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <form ng:submit="submit()">
 
 
-<table ng:show ="dataShow">
-    <tr>
-        <th>Bonded Date </th>
+      SAC Date : <input type="date" ng-model="bondDate" required><br>
+      Bill Date: <input type="date" ng-model="billDate" required><br>
+      sqmPrice Amount :<input type="number" ng-model="billAmount" required><br>
+      no.of Containers :<input type="number" ng-model="noOfContainers" required><br>
+      Containers Size : <select ng:model="size"><option value= "25"> 20</option> <option value="50">40</option></select>
+      <br>
+      <br>
+
+      <button type="submit">Generate no weeks</button>
+    </form>
+
+
+    <br>
+    <br>
+
+
+    <table ng:show="dataShow">
+      <tr>
+        <th>SAC Date(FROM) </th>
         <th>Billed Date</th>
         <th>Diff b/w Dates</th>
         <th>Actual no of weeks</th>
-        <th>Rounded actual no of weeks </th>
         <th>Un billed No Of Weeks</th>
+        <th>Amount per week</th>
+        <th>Bill Amount(first 4 weeks ) </th>
+
+
+       
       </tr>
-      <tr>
+     
+      <tr ng-repeat = "responsedata in multipleInvoicedata">
+    
         <td>{{responsedata.bonded | date}}</td>
         <td>{{responsedata.billed | date}}</td>
         <td>{{responsedata.diffDays}}</td>
-        <td>{{responsedata.noOfWeeks}}</td>
         <td>{{responsedata.roundedNoOfWeeks}}</td>
-        <td>{{responsedata.ubbilledweeks}}</td>
-      </tr>
-</table>
-<br>
-<br>
-<table ng:show ="dataShow">
-    <tr>
-        <th>Total Amount  </th>
+        <td>{{responsedata.ubbilledweeks}}</td> 
+        <td>{{responsedata.roundedperweekAmount }}</td>
+        <td>{{responsedata.fourWeeks}}</td>
 
-        <th>Total Amount per week</th>
-        <th>Rounded Amount per week</th>
-
-        <th>Billed Amount (first 4 weeks )</th>
-        <th>Rounded Billed Amount(first 4 weeks ) </th>
-
-        <th>Actual Un Billed Amount</th>
-        <th>Rounded Un Billed Amount </th>
        
       </tr>
-      <tr>
-        <td>{{responsedata.totalAmount }}</td>
+    </table>
+    <br>
 
-        <td>{{responsedata.amountPerWeekAmount }}</td>
-        <td>{{responsedata.roundedperweekAmount }}</td>
 
-        <td>{{responsedata.billedAmount}}</td>
-        <td>{{responsedata.roundedBilledAmount}}</td>
+  </div>
 
-        <td>{{responsedata.unbilledAmount}}</td>
-        <td>{{responsedata.roundedUnbliedAmount}}</td>
-      </tr>
-</table>
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function ($scope, $http) {
+      let current_Date = new Date();
+      $scope.bondDate = current_Date;
+      $scope.billDate = current_Date;
+      $scope.multipleInvoicedata = [];
+      $scope.submit = function () {
+           
 
-</div>
+        $http({
+          method: 'POST',
+          url: '/cal',
+          data: { bondDate: $scope.bondDate, 
+                  billDate: $scope.billDate, 
+                  billAmount: $scope.billAmount,
+                  noOfContainers:$scope.noOfContainers,
+                  size:parseInt($scope.size)
+                 }
+        }).then(function successCallback(response) {
+          // this callback will be called asynchronously
+          // when the response is available
+          console.log(response);
+          $scope.multipleInvoicedata.push(response.data);
+          $scope.dataShow = true;
 
-<script>
-var app = angular.module('myApp', []);
-app.controller('myCtrl', function($scope,$http) {
-    let current_Date = new Date(); 
-    $scope.bondDate = current_Date;
-    $scope.billDate = current_Date;
+        }, function errorCallback(response) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+        });
+      }
 
-    $scope.submit = function(){
-
-    
-    $http({
-         method: 'POST',
-         url: '/cal',
-         data:{bondDate:$scope.bondDate,billDate:$scope.billDate,billAmount:$scope.billAmount}
-}).then(function successCallback(response) {
-    // this callback will be called asynchronously
-    // when the response is available
-    console.log(response);
-    $scope.responsedata = response.data;
-    $scope.dataShow = true;
-
-  }, function errorCallback(response) {
-    // called asynchronously if an error occurs
-    // or server returns response with an error status.
-});
-}
-
-});
-</script>
+    });
+  </script>
 
 </body>
+
 </html>
