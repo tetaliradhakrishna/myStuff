@@ -60,6 +60,9 @@ app.post('/cal', (req, res) => {
   let NO_SQM = noOfContainers * size;
   let FIRST_WEEK_BILLED_AMOUNT = 1 * NO_SQM * ONE_SQM_PRICE
   let FIRST_4_WEEKS_BIILED_AMOUT = 4 * NO_SQM * ONE_SQM_PRICE;
+
+  // this cal will give if data is the more the 4 weeks will cal total weeks if not will bill first 4 weeks 
+  let TOTAL_BILL = (Math.ceil((NO_OF_WEEKS >= 4))) ? Math.ceil(NO_OF_WEEKS) * NO_SQM * ONE_SQM_PRICE : FIRST_4_WEEKS_BIILED_AMOUT ;
   
   console.log("NO_SQM",NO_SQM);
   console.log("FIRST_WEEK_BILLED_AMOUNT",FIRST_WEEK_BILLED_AMOUNT);
@@ -73,9 +76,9 @@ app.post('/cal', (req, res) => {
     roundedNoOfWeeks: Math.ceil(NO_OF_WEEKS),
     ubbilledweeks: UNBILLED_WEEKS,
     roundedperweekAmount:FIRST_WEEK_BILLED_AMOUNT,
-
     fourWeeks:Math.round(FIRST_4_WEEKS_BIILED_AMOUT),
-    areaInSq:NO_SQM
+    areaInSq:NO_SQM,
+    totalBill:TOTAL_BILL
 
 
   })
