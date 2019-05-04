@@ -1,7 +1,7 @@
 let CLOUDANT_HOST_SSL_PROD = process.env.CLOUDANT_HOST_SSL_PROD;
      //console.log("process",CLOUDANT_HOST_SSL_PROD);
 let page_result = 10;
-let skip_rows = 1;
+let skip_rows = 5;
 let url =  CLOUDANT_HOST_SSL_PROD + '/sslwarehouse/'  + '_design/sslDesignDoc/_search/byClientName?include_docs=true';
 		
     // work on this procees for pagination and queies
