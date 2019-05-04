@@ -1,0 +1,14 @@
+{
+  "name": "mytestapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "apiErrorHandling.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express-rate-limit": "^2.11.0"
+  }
+}

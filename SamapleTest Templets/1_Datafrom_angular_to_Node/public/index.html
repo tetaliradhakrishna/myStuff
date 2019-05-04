@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+   
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+</head>
+
+
+ <body ng-app="app" ng-controller="myCtrl">
+      
+        <p>Mobile-Number<input type="number" name="number" ng-model="number" required /></p>
+        <button ng-click="login()">Submit</button>
+        <hr />
+        {{ PostDataResponse }}
+   
+    <script>
+        var app = angular.module("app",[]);
+        app.controller("myCtrl", function($scope,$http){
+        $scope.login = function(){
+              
+               $scope.randomValue = Math.floor(1000 + Math.random() * 9000);
+               $scope.jjsStaffNumber ='+91' + $scope.number;
+            var data = {
+
+                    mobile: $scope.jjsStaffNumber,
+                    otp: $scope.randomValue
+            }
+
+                 console.log(data);
+           // twilio otp
+            $http.post('/otpData', data)
+            .success(function(data){
+                 //console.log(data);
+                if( data == '0'){
+                    $global.setAdminlogged(true);
+                    $location.path('/search');      
+                }
+                else if( data == '-1'){
+                    $scope.Error ='Please enter the correct username and password.';
+                }
+            });
+        };  
+        });
+    </script>
+ </body>
+ </html>

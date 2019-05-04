@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>The example shows how to create a Quiz, Angular2 Survey Library Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://npmcdn.com/zone.js@0.8.17/dist/zone.js"></script>
+    <script src="https://npmcdn.com/core-js/client/shim.min.js"></script>
+    <script src="https://npmcdn.com/rxjs@5.0.0-beta.6/bundles/Rx.umd.js"></script>
+    <script src="https://npmcdn.com/@angular/core@2.0.0-rc.5/bundles/core.umd.js"></script>
+    <script src="https://npmcdn.com/@angular/common@2.0.0-rc.5/bundles/common.umd.js"></script>
+    <script src="https://npmcdn.com/@angular/compiler@2.0.0-rc.5/bundles/compiler.umd.js"></script>
+    <script src="https://npmcdn.com/@angular/platform-browser@2.0.0-rc.5/bundles/platform-browser.umd.js"></script>
+    <script src="https://npmcdn.com/@angular/platform-browser-dynamic@2.0.0-rc.5/bundles/platform-browser-dynamic.umd.js"></script>
+    <script src="https://surveyjs.azureedge.net/1.0.43/survey.angular.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./index.css">
+
+</head>
+
+<body>
+    <ng-app></ng-app>
+    <div id="surveyResult"></div>
+
+    <script type="text/javascript" src="./index.js"></script>
+
+</body>
+<script>
+    Survey
+        .StylesManager
+        .applyTheme("bootstrap");
+    Survey.defaultBootstrapCss.navigationButton = "btn btn-green";
+
+    var json = {
+        title: "American History",
+        showProgressBar: "bottom",
+        showTimerPanel: "top",
+        maxTimeToFinishPage: 10,
+        maxTimeToFinish: 25,
+        firstPageIsStarted: true,
+        startSurveyText: "Start Quiz",
+        pages: [{
+            questions: [{
+                type: "html",
+                html: "You are about to start quiz by history. <br/>You have 10 seconds for every page and 25 seconds for the whole survey of 3 questions.<br/>Please click on <b>'Start Quiz'</b> button when you are ready."
+            }]
+        }, {
+            questions: [{
+                type: "radiogroup",
+                name: "civilwar",
+                title: "When was the Civil War?",
+                choices: [
+                    "1750-1800", "1800-1850", "1850-1900", "1900-1950", "after 1950"
+                ],
+                correctAnswer: "1850-1900"
+            }]
+        }, {
+            questions: [{
+                type: "radiogroup",
+                name: "libertyordeath",
+                title: "Who said 'Give me liberty or give me death?'",
+                choicesOrder: "random",
+                choices: [
+                    "John Hancock", "James Madison", "Patrick Henry", "Samuel Adams"
+                ],
+                correctAnswer: "Patrick Henry"
+            }]
+        }, {
+            maxTimeToFinish: 15,
+            questions: [{
+                type: "radiogroup",
+                name: "magnacarta",
+                title: "What is the Magna Carta?",
+                choicesOrder: "random",
+                choices: [
+                    "The foundation of the British parliamentary system",
+                    "The Great Seal of the monarchs of England",
+                    "The French Declaration of the Rights of Man",
+                    "The charter signed by the Pilgrims on the Mayflower"
+                ],
+                correctAnswer: "The foundation of the British parliamentary system"
+            }]
+        }],
+        completedHtml: "<h4>You have answered correctly <b>{correctedAnswers}</b> questions from <b>{questionCount}</b>.</h4>"
+    };
+
+    window.survey = new Survey.Model(json);
+
+    survey
+        .onComplete
+        .add(function (result) {
+            document
+                .querySelector('#surveyResult')
+                .innerHTML = "result: " + JSON.stringify(result.data);
+        });
+
+    function onAngularComponentInit() {
+        Survey
+            .SurveyNG
+            .render("surveyElement", {
+                model: survey
+            });
+    }
+    var HelloApp = ng
+        .core
+        .Component({
+            selector: 'ng-app',
+            template: '<div id="surveyContainer" class="survey-container contentcontainer codecontainer"><div id="surveyElement"></div></div> '
+        })
+        .Class({
+            constructor: function () {},
+            ngOnInit: function () {
+                onAngularComponentInit();
+            }
+        });
+    document.addEventListener('DOMContentLoaded', function () {
+        ng
+            .platformBrowserDynamic
+            .bootstrap(HelloApp);
+    });
+</script>
+
+</html>

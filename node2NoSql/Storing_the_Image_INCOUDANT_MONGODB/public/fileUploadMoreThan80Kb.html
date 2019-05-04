@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+   
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+</head>
+
+
+ <body ng-app="app" ng-controller="myCtrl">
+      
+<div class="container">
+    <div  class="row">
+        <button class="btn btn-primary pull-right" ng-hide="images.length == 0" ng-click="clearAll()">Clear All</button>
+         <h3 ng-bind="name"></h3>
+
+        <input type="file" ng-click="$event = $event" ng-model="display" multiple onchange="angular.element(this).scope().upload(event)" accept="image/png, image/jpeg, image/gif" src="cid=radha1251" />
+        <div class="row">
+            <div class="col-md-12"> <span ng-repeat='img in images'> <a href="#" ng-click="setImage($index)">
+                 <img ng-src="{{img}}" 
+                    alt="Generic placeholder thumbnail" style="max-height:100px;" class="thumbnail"/>
+              </a>
+            </span>
+            </div>
+        </div>
+        <div>
+           <button type="button" ng-click="submit()">click</button>
+        </div>
+   <!--      <img ng-src="{{display}}" ng-hide="!display" />
+         <h4>You have upload {{images.length}} images this session.</h4> -->
+
+    </div>
+</div>
+   
+    <script>
+        var app = angular.module("app",[]);
+        app.controller("myCtrl", function($scope,$http){
+
+          $scope.name = "Select Files to Upload";
+    $scope.images = [];
+    $scope.display = $scope.images[$scope.images.length - 1];
+    $scope.setImage = function (ix) {
+        $scope.display = $scope.images[ix];
+    }
+    $scope.clearAll = function () {
+        $scope.display = '';
+        $scope.images = [];
+    }
+    $scope.upload = function (obj) {
+        var elem = obj.target || obj.srcElement;
+        for (i = 0; i < elem.files.length; i++) {
+            var file = elem.files[i];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $scope.images.push(e.target.result);
+                $scope.display = e.target.result;
+                $scope.$apply();
+                //console.log("image",$scope.images);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+              $scope.submit = function(){
+            
+                  var data ={
+
+                      image:$scope.images 
+                  }
+                  console.log("sendingData");
+
+           // sending image to node
+            $http.post('/imageData',data)
+            .success(function(data){
+                
+                if( data == '0'){
+                    console.log("data passed");
+                }
+                else if( data == '-1'){
+                    $scope.Error ='Please enter the correct username and password.';
+                }
+            });
+        }; 
+    
+        });
+    </script>
+ </body>
+ </html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript">
+  	
+   function myfunction(myvar){
+    console.log(myvar)
+		  var urls = myvar;
+		  var myurls = urls.split("?color=");
+		  var mylasturls = myurls[1];
+		  var mynexturls = mylasturls.split("&");
+		  var url = mynexturls[0];
+		  alert(url)
+        }
+  
+ //myfunction(window.top.location.href);
+myfunction("http://www.something.com/foo/bar/index.html?color=yellow&animal=rat");
+
+  </script>
+	<title>?id=123</title>
+</head>
+<body>
+
+</body>
+</html>
+
+
+
+

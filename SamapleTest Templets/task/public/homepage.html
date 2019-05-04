@@ -1,0 +1,74 @@
+ <div class="container" style="border-radius: 5px;border-color: black">
+  <h1>Search!</h1>
+  <div class="row">
+  	<form ng:submit="search()">
+    <div class="col-sm-2" >
+      <label>Type </label><br>
+      <select ng:model="selectedType"  required> 
+      	<option value="">--Select--</option>
+      	<option value= 'movie'>Movie</option>
+      	<option value='series'>Series</option>
+      	<option value='episode'> Episode</option>
+      </select>
+    </div>
+    <div class="col-sm-4">
+      <lable> Search Your Movie</lable><br>
+     <input type="text" ng:model="movieName" required />
+    </div>
+     <div class="col-sm-2">
+      <lable>Year</lable><br>
+      <select ng:model="selectedYear" required> 
+      	<option value="">--Select--</option>
+      	<option>2005</option>
+      	<option>2006</option>
+      	<option>2007</option>
+      	<option>2008</option>
+      	<option>2009</option>
+      	<option>2010</option>
+      	<option>2011</option>
+      	<option>2012</option>
+      	<option>2013</option>
+      	<option>2014</option>
+      	<option>2015</option>
+      	<option>2016</option>
+      	<option>2017</option>
+      	<option>2018</option>
+      	<option>2019</option>
+      </select>
+    </div>
+     <div class="col-sm-2">
+     	<button class="btn btn-info" type="submit"> Search </button>
+     </div>
+
+     <div class="col-sm-2">
+     	<button class="btn btn-warning" type="button" ng:click="reset()"> Reset </button>
+     </div>
+     <br>
+     <span style="color: red">{{message}}</span>
+  </div>
+ 
+  <!-- Table  -->
+  <table class="table table-striped" ng:show = "dataShow">
+
+  	<thead>
+  	
+  	<th>Poster</th>
+  	<th>Title </th>
+  	<th>Type </th>
+  	<th>imdbID </th>
+  	<th>Year</th>
+
+   
+  	</thead>
+  	<tbody>
+  	<tr ng:repeat ="x in resData">
+  		<td><img ng:src='{{x.Poster || "empty"}}' style="width: 50px;height: 50px;"></td>
+  		<td>{{x.Title}}</td>
+  		<td>{{x.Type}}</td>
+  		<td>{{x.imdbID}}</td>
+  		<td>{{x.Year}}</td>
+  	</tr>
+  	</tbody>
+  </table>
+  		
+</div> 

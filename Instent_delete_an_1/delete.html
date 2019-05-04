@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <title>delete</title>
+    <style>
+	    .list_data { margin-bottom: 2rem }
+	    table, th, td { border: 1px solid #AAA }
+	    th { cursor: pointer }
+    </style>
+</head>
+  
+<body ng-controller="RecordCtrl">
+    <div class="list_data">
+        <h1>List Data</h1>
+        <table>
+            <tr>
+                <th ng-click="type = 'include';">select</th>
+                <th ng-click="type = 'shipper'; ">shipper</th>
+                <th ng-click="type = 'blNumber'; ">BLNumber</th>
+                <th ng-click="type = 'date'; ">BlDate</th>
+                <th ng-click="type = 'blQuty'; ">BL Qunantity</th>
+                <th ng-click="type = 'noOfPackages'; ">Number of packages</th>
+                <th ng-click="type = 'billOfEntryNO'; ">Bill of Entry Number</th>
+                <th ng-click="type = 'billOfEntryDate'; ">Bill of Entry Date</th>
+                <!--<th ng-click="type = 'tax'; reverse = !reverse">Bill of Entry Qunantity</th>
+                <th ng-click="type = 'tax'; reverse = !reverse">check in delete</th>
+                <th ng-click="type = 'tax'; reverse = !reverse">Exbond BE Number</th>
+                <th ng-click="type = 'tax'; reverse = !reverse">Exbond BE Date</th>
+                <th ng-click="type = 'tax'; reverse = !reverse">Exbond BE Qunantity</th>
+                <th ng-click="type = 'tax'; reverse = !reverse">Exbond BE Number of Packages</th>
+                <th ng-click="type = 'tax'; reverse = !reverse">Factory Address</th>
+                <th ng-click="type = 'tax'; reverse = !reverse">Check-Out Date</th>-->
+                <th>Action</th>
+            </tr>
+            <tr ng-repeat="record in records">
+                <td><input type="checkbox" ng-model="record.include"></td>
+                <td>{{record.shipper }}</td>
+                <td>{{record.blNumber }}</td>
+                <td>{{record.date }}</td>
+                <td>{{record.blQuty }}</td>
+                <td>{{record.noOfPackages }}</td>
+                <td>{{record.billOfEntryNO }}</td>
+                <td>{{record.billOfEntryDate}}</td>
+
+                <td><button ng-click="Delete($index)">Delete</button></td>
+            </tr>
+           
+        </table>
+        <!--<button ng-show="history.length > 0" ng-click="Undo()">Undo Delete</button>-->
+    </div>
+  
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js"></script>
+	<script src="delete.js"></script>
+</body>
+</html>
