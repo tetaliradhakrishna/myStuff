@@ -124,7 +124,7 @@ function update(data) {
     console.log("data to update", data._id);
     console.log("data filenumber update to DB ",count2)
 
-    data["userEnteredFileNumber"] = count2 + "-19-20" ;
+    data["userEnteredFileNumber"] = count2.toString() + "1920" ;
    //console.log(data)
 
     return new Promise(function (resolve, reject) {
