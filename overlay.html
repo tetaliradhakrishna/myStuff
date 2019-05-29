@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+    <style>
+        #overlay {
+            position: fixed;
+            display: none;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        #text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 50px;
+            color: white;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+
+
+   
+
+    <div ng-app="overlay" ng-controller="overlayController">
+
+        <div id="overlay" ng:click="off()">
+            <div id="text"></div>
+        </div>
+
+        <div style="padding:20px">
+            <h2>Overlay with Text  -- {{test}}</h2>
+            <button ng:click="on()">Turn on overlay effect</button>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        var app = angular.module('overlay', [])
+        app.controller('overlayController', function ($scope) { 
+            $scope.test ="ass";
+         
+            on();
+         function on () {
+            document.getElementById("overlay").style.display = "block";
+        }
+        $scope.off = function() {
+            document.getElementById("overlay").style.display = "none";
+         }
+
+
+        });
+    </script>
+
+
+</body>
+
+</html>
