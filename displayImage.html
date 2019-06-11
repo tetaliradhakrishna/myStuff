@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+    <script type="text/javascript">
+        var app = angular.module('MyApp', [])
+        app.controller('MyController', function ($scope, $http) {
+
+            let url = "http://18.188.66.126:8888/fetchEmpImages?id=89918540400106693985&collection=uploadImages";
+
+            $http.get(url)
+                .then(function (response) {
+                    $scope.Customers = []
+                    //response.data.message;
+
+
+                    for(let i=0;i<response.data.message.length;i++){
+
+                         let convertPath = response.data.message[i].path.replace(/\\/g, '/');
+                        
+                          console.log("convertPath",convertPath);
+                         
+                         let split_the_path = convertPath.split("/");
+                         
+                         console.log('split_the_path',split_the_path);
+                        //response.data.message[i].path.replace(/\\/g, '/')
+                        $scope.Customers.push({ imagePath:'http://18.188.66.126:8888/' + split_the_path[2] })
+                        
+                        console.log("loop  changed path", $scope.Customers)
+
+                    }
+                    //$scope.path = ' http://18.188.66.126:8888/myImage-1559803269882.jpg';
+                   
+                });
+        });
+    </script>
+    <div ng-app="MyApp" ng-controller="MyController">
+        <div ng-repeat="x in Customers">
+            <!-- {{x.imagePath}} -->
+            <img src="{{x.imagePath}}" style="width:50px;height:50px;">
+
+        </div>
+        <br />
+    </div>
+</body>
+
+</html>
