@@ -1,0 +1,70 @@
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+    <script type="text/javascript">
+        var app = angular.module('MyApp', [])
+        app.controller('MyController', function ($scope, $http) {
+
+            // sample data 
+            let rate_Master_data = {
+                name: "whiznext",
+                rate_master: [
+                    {
+                        from: "vijayawada",
+                        to: "hyderabad",
+                        amount: 1000
+                    },
+                    {
+                        from: "vijayawada",
+                        to: "viskapatanam",
+                        amount: 2000
+                    }
+                ]
+            }
+            $scope.searchAndFetch = () => {
+                $scope.amount = " working test";
+
+                // get the data  from user entred 
+                // console.log(">> From << ", $scope.from);
+                // console.log(" >> TO <<", $scope.to);
+
+                // itreate the data and fetch the amount 
+                for (let i = 0; i < rate_Master_data.rate_master.length; i++) {
+
+                    // console.log(">> ittiration Data from << ", rate_Master_data.rate_master[i].from);
+                    // console.log(">> ittiration Data to << ", rate_Master_data.rate_master[i].to);
+
+
+                    if ($scope.from == rate_Master_data.rate_master[i].from
+                        && $scope.to == rate_Master_data.rate_master[i].to) {
+                       // console.log(">>  Get matched Amount <<", rate_Master_data.rate_master[i].amount);
+                        $scope.amount = rate_Master_data.rate_master[i].amount;
+                    }
+
+
+                }
+            }
+
+        });
+    </script>
+    <div ng-app="MyApp" ng-controller="MyController">
+        <div class="container">
+            <div class="row">
+                <div>
+                    From:<input ng:model="from">
+                    TO:<input ng:model="to" ng:change="searchAndFetch()">
+                    Amount:{{amount}}
+                </div>
+            </div>
+
+        </div>
+        <br />
+    </div>
+</body>
+
+</html>
