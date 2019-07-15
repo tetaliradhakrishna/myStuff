@@ -1,0 +1,22 @@
+let moment  = require('moment');
+
+let startDate = moment("8-07-2019", "DD.MM.YYYY");
+let endDate = moment(new Date(), "DD.MM.YYYY");
+
+const result =  endDate.diff(startDate, 'days');
+
+console.log(">> working <<", result);
+
+
+
+if( result  == 15){
+    console.log(" >>  value expried 15 days ");
+}
+else if ( result == 7){
+   console.log( " >> value expried in 7 days " );
+}
+else {
+    console.log(" >> value expried in 3 days ");
+}
+
+ 
