@@ -1,7 +1,7 @@
 /*eslint-env node*/
 
 //------------------------------------------------------------------------------
-// node.js starter application for Bluemix
+// node.js starter application for mongo DB
 //------------------------------------------------------------------------------
 
 // This application uses express as its web server
@@ -40,20 +40,36 @@ app.use(bodyParser.json());
 // mongo connection 
 
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+var url = "mongodb://localhost:27017/mydb";
+
+
+// Connecting DB with Mongoose.
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+// Connecting to the database
+mongoose.connect(url, {
+    useNewUrlParser: true
+}).then(() => {
+    console.log("Successfully connected to the database");    
+}).catch(err => {
+    console.log('Could not connect to the database. Exiting now...', err);
+    process.exit();
+});
+
+
 
 // insert operation 
-/*MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("mydb");
-  var myobj = { name: "radhakrishna Inc", address: "node developer 37" };
-  dbo.collection("customers").insert(myobj, function(err, res) {
-    if (err) throw err;
-    console.log("1 document inserted");
-    db.close();
-  });
-});
-*/
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("mydb");
+//   var myobj = { name: "radhakrishna IncPla", address: "node developer 37" };
+//   dbo.collection("customers").insert(myobj, function(err, res) {
+//     if (err) throw err;
+//     console.log("1 document inserted");
+//     db.close();
+//   });
+// });
+
 // get operation  
 /*MongoClient.connect(url, function(err, db) {
   if (err) throw err;
@@ -94,17 +110,17 @@ cursor.each(function(err, item) {
 });*/
 
 
-// delete 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  var dbo = db.db("mydb");
-  var myquery = { address : "node developer 37" };
-  dbo.collection("customers").deleteOne(myquery, function(err, obj) {
-    if (err) throw err;
-    console.log("1 document deleted");
-    db.close();
-  });
-});
+// // delete 
+// MongoClient.connect(url, function(err, db) {
+//   if (err) throw err;
+//   var dbo = db.db("mydb");
+//   var myquery = { address : "node developer 37" };
+//   dbo.collection("customers").deleteOne(myquery, function(err, obj) {
+//     if (err) throw err;
+//     console.log("1 document deleted");
+//     db.close();
+//   });
+// });
 
 
 // start server on the specified port and binding host
