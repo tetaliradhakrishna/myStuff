@@ -45,29 +45,29 @@ let CLOUDANT_HOST = process.env.CLOUDANT_HOST_SSL_PROD,
     APPLICATION_JSON_HEADER = 'application/json; charset=utf-8',
     ALLDOCS_QUERY = '_all_docs?include_docs=true';
 
-    let count = 0
+let count = 0
 getRecordsData();
 async function getRecordsData() {
     console.log(blnumbers.length)
-    
-    for (var i = 0 ;i < blnumbers.length; i++) {
+
+    for (var i = 0; i < blnumbers.length; i++) {
         await getUserFilesNumbers(blnumbers[i])
-       console.log( count = count + 1) 
-       if(count == blnumbers.length){
-        console.log(" Whole Data", blData.length, errorData)
-        await updateFileNumbers()
-       }
+        console.log(count = count + 1)
+        if (count == blnumbers.length) {
+            console.log(" Whole Data", blData.length, errorData)
+            await updateFileNumbers()
+        }
 
     }
 
 }
 
- let count2  = 1;
-async function updateFileNumbers(){
-    console.log("afterData length",blData.length)
-    for (var i = 0 ;i < blData.length; i++) {
+let count2 = 1;
+async function updateFileNumbers() {
+    console.log("afterData length", blData.length)
+    for (var i = 0; i < blData.length; i++) {
         await update(blData[i])
-        count2  =count2 + 1
+        count2 = count2 + 1
     }
 
 }
@@ -76,13 +76,13 @@ async function updateFileNumbers(){
 let blData = [];
 let errorData = [];
 function getUserFilesNumbers(number) {
-   // console.log(number)
+    // console.log(number)
 
-   // let id = number.substr(number.length - 4, number.length);
+    // let id = number.substr(number.length - 4, number.length);
     var url = CLOUDANT_HOST + DB +
         '_design/sslDesignDoc/_search/fetchForUpdate?include_docs=true&query=record:\"' + number + '\"';
 
-       console.log(url)
+    console.log(url)
     return new Promise(function (resolve, reject) {
         setTimeout(function () {
 
@@ -94,26 +94,26 @@ function getUserFilesNumbers(number) {
                 if (error) {
                     reject(new Error('Ooops, something broke!', error));
                 } else {
-                   //console.log(response.statusCode,response.statusMessage,body);
+                    //console.log(response.statusCode,response.statusMessage,body);
                     jsonData = JSON.parse(body)
-                   // console.log(jsonData)
+                    // console.log(jsonData)
                     resolve(response.statusCode)
                     if (jsonData.rows[0].doc.billingData == undefined) {
                         blData.push(jsonData.rows[0].doc);
 
-                       // console.log("if")
+                        // console.log("if")
                         resolve(blData)
                     } else {
-                       // console.log("else")
+                        // console.log("else")
                         errorData.push(jsonData.rows[0].doc);
                         resolve(errorData)
 
                     }
                 }
-               
+
 
             })
-        } ,1000)
+        }, 1000)
     });
 
 }
@@ -122,10 +122,10 @@ function getUserFilesNumbers(number) {
 function update(data) {
 
     console.log("data to update", data._id);
-    console.log("data filenumber update to DB ",count2)
+    console.log("data filenumber update to DB ", count2)
 
-    data["userEnteredFileNumber"] = count2.toString() + "1920" ;
-   //console.log(data)
+    data["userEnteredFileNumber"] = count2.toString() + "1920";
+    //console.log(data)
 
     return new Promise(function (resolve, reject) {
         setTimeout(function () {
@@ -135,21 +135,21 @@ function update(data) {
                 headers: 'application/json',
                 method: 'PUT',
                 json: data
-    
+
             }, (error, response, body) => {
-        
+
                 if (error) {
 
-                    reject(new Error('Ooops, something broke!',error));
-            
-                  } else {
-            
-                    resolve(response.statusCode,response.statusMessage);
-            
-                  }
-        
-            },2000)
+                    reject(new Error('Ooops, something broke!', error));
+
+                } else {
+
+                    resolve(response.statusCode, response.statusMessage);
+
+                }
+
+            }, 2000)
 
         })
     })
- }
+}
