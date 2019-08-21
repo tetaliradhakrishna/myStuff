@@ -41,33 +41,25 @@ function insertData() {
           };
         dbo.collection("ap24x7").insert(myobj, function (err, res) {
             if (err) throw err;
-            
-            console.log(  increase + "document inserted");
-         
+            console.log(  increase + "document inserted");  
             db.close();
         });
     });
-
 }
-
-
 
 // Fetch 
 MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db("afts");
-    dbo.collection("ap24x7").find({ date: 20190814 }).toArray(function (err, results) {
+    dbo.collection("ap24x7").find({ date: 20190814 ,type:"test"}).toArray(function (err, results) {
         if (err) {
             console.log(err);
         }
-        console.log(results.length); // output all records
+        console.log(results); // output all records
         db.close();
     });
 
 });
-
-
-
 
 // start server on the specified port and binding host
 app.listen(appEnv.port, '0.0.0.0', function () {
