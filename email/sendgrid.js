@@ -10,7 +10,7 @@ var WHIZNEXT_SENDGRID_MAIL_API = 'https://api.sendgrid.com/v3/mail/send';
 
 //  var email='SSL@whiznext.com';
 var FROM_EMAIL = 'radha784578@gmai.com'; // from 
-var REACHUS_EMAIL_TWO = 'tetaliradhakrishna@gmail.com'; // to mail
+var REACHUS_EMAIL_TWO = ['tetaliradhakrishna@gmail.com','nagendran547@gmail.com']; // to mail
 // radhakrishna@whiznext.com
 
 var headerValues = {
@@ -26,56 +26,65 @@ function encrypt(file) {
   return encrypted;
 };
 
-const file_name = " one.xlsx"
+const file_name = " one.xlsx";
 
-var data = {
-  'personalizations': [{
-    'to': [{
-      'email': REACHUS_EMAIL_TWO
+
+for(let i=0 ;i<REACHUS_EMAIL_TWO.length;i++){
+  send_Mutiple_emails(REACHUS_EMAIL_TWO[i])
+}
+
+function send_Mutiple_emails(reachmail) {
+
+
+  var data = {
+    'personalizations': [{
+      'to': [{
+        'email': reachmail
+      }]
+    }],
+    'from': {
+      'email': FROM_EMAIL
+
+    },
+    'subject': "hey there ",
+    'content': [{
+      'type': 'text/html',
+      'value': "<h1>radhakrishna test</h1>",
+    }],
+    "attachments": [{
+      "content": base64data,
+      "filename": file_name
     }]
-  }],
-  'from': {
-    'email': FROM_EMAIL
-
-  },
-  'subject': "hey there ",
-  'content': [{
-    'type': 'text/html',
-    'value': "<h1>radhakrishna test</h1>",
-  }],
-  "attachments": [{
-    "content": base64data,
-    "filename": file_name
-  }]
-};
+  };
 
 
 
-//console.log(data);
-request(
-  {
-    uri: WHIZNEXT_SENDGRID_MAIL_API,
-    method: 'POST',
-    headers: headerValues,
-    json: data
+  //console.log(data);
+  request(
+    {
+      uri: WHIZNEXT_SENDGRID_MAIL_API,
+      method: 'POST',
+      headers: headerValues,
+      json: data
 
-  },
-  function (error, response, body) {
-    if (error) {
-      console.log('Internal Error occurred to send mail: ' + error);
-      // callback(error);
+    },
+    function (error, response, body) {
+      if (error) {
+        console.log('Internal Error occurred to send mail: ' + error);
+        // callback(error);
+      }
+
+      console.log('--Return Code : ' + response.statusCode);
+      if (response.statusCode != 202) {
+        console.log('Failed to send email: ' + response.statusCode);
+        //callback(null, response);
+      }
+      else {
+        console.log('Successfully sent email');
+        //callback(null, response);
+      }
+
     }
-
-    console.log('--Return Code : ' + response.statusCode);
-    if (response.statusCode != 202) {
-      console.log('Failed to send email: ' + response.statusCode);
-      //callback(null, response);
-    }
-    else {
-      console.log('Successfully sent email');
-      //callback(null, response);
-    }
-
-  }
-);
+  );
+}
 
