@@ -40,7 +40,7 @@ app.use(bodyParser.json());
 // mongo connection 
 
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/mydb";
+var url = "mongodb://18.217.244.18:27017/mydb";
 
 
 // Connecting DB with Mongoose.
