@@ -1,0 +1,77 @@
+/**
+ * This job is will hit every day 00:00
+ * This job will fetch the current date records and it will push to the array once reciving the data to the array sql pump job will start  
+ 
+ */
+
+var MongoClient = require("mongodb").MongoClient;
+var CronJob = require("cron").CronJob;
+
+let LOCAL_URL = "mongodb://localhost:27017/";
+let DB = "mydb",
+    COLLECTION = "customers",
+    READY_PUMPED_DATA =[];
+
+
+var job = new CronJob(
+  "00 00 00 * * *",
+  () => {
+    /*
+     * Runs every day
+     * at 00:00:00 AM.
+     */
+    find_matched_data();
+
+    // DO SOMETHING
+  },
+  () => {
+    /* This function is executed when the job stops */
+  },
+  true /* Start the job right now */
+);
+
+find_matched_data();
+
+function find_matched_data() {
+  MongoClient.connect(LOCAL_URL, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db(DB);
+    var cursor = dbo.collection(COLLECTION).find({created:convertDateToInteger(new Date())});
+    // Execute the each command, triggers for each document
+    cursor.each(function(err, item) {
+      // If the item is null then the cursor is exhausted/empty and closed
+      if (item == null) {
+        db.close();
+        console.log("TOTAL RECORDS",READY_PUMPED_DATA);
+        push_data_no_sql();
+        return;
+       
+      } else {
+        READY_PUMPED_DATA.push(item);
+        
+      }
+      // otherwise, do something with the item
+    });
+  });
+};
+
+/* Push data to the SQL */
+
+function push_data_no_sql(){
+   console.log("pushing data");
+
+};
+
+convertDateToInteger = (data) => {
+    if (data == undefined || data == null || data == "") {
+        return Number();
+
+    } else {
+        var dateToConvert = new Date(data);
+        // month should return with a leading zero incase of single digit number
+        var month = (dateToConvert.getMonth() + 1) <= 9 ? '0' + (dateToConvert.getMonth() + 1) : (dateToConvert.getMonth() + 1);
+        var day = dateToConvert.getDate() <= 9 ? '0' + dateToConvert.getDate() : dateToConvert.getDate();
+        var formattedDate = dateToConvert.getFullYear().toString() + month + day;
+        return Number(formattedDate); //This will convert the date string into number, in order to store in database
+    }
+};
