@@ -9,7 +9,7 @@
 		"body-parser": "x.x.x",
 		"cfenv": "1.0.x",
 		"express": "4.13.x",
-		"mongodb": "^3.0.5",
+		"mongodb": "^3.1.13",
 		"nodemailer": "x.x.x",
 		"request": "x.x.x"
 	},
