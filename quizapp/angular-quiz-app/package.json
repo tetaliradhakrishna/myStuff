@@ -38,7 +38,7 @@
     "method-override": "^2.3.5",
     "newrelic": "^1.28.3",
     "node-env-file": "^0.1.8",
-    "node-notifier": "^5.1.2",
+    "node-notifier": "^8.0.1",
     "spotify-web-api-node": "^2.3.0",
     "yargs": "^10.0.3",
     "cfenv": "x.x.x"
